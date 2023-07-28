@@ -30,21 +30,26 @@
 
 ### 📌 도면
 
-* 쇼핑 카트 설계도 
+<details>
+<summary>쇼핑 카트 설계도</summary>
+<img width="800" alt="스크린샷 2023-07-29 오전 12 05 13" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/fc163cca-7ea1-42c0-8f9e-974f5c768b48"> (by 석환)
+</details>
   
-   <img width="800" alt="스크린샷 2023-07-29 오전 12 05 13" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/fc163cca-7ea1-42c0-8f9e-974f5c768b48"> (by 석환)
+<details>
+<summary>쇼핑 카트 평면도</summary>
+<img width="800" alt="스크린샷 2023-07-29 오전 12 04 15" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/306f1d71-ec22-413b-83e7-648f673314a4"> (by 지수)
+</details>
 
-* 쇼핑 카트 평면도 
-  
-   <img width="800" alt="스크린샷 2023-07-29 오전 12 04 15" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/306f1d71-ec22-413b-83e7-648f673314a4"> (by 지수)
+<details>
+<summary>마트 내부 구조도</summary>
+<img width="800" alt="스크린샷 2023-07-29 오전 12 13 18" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/4ef81217-a6d5-47d3-8266-bdef49cf5575"> (by 지수)
+</details> 
 
-* 마트 내부 구조도 
+<details>
+<summary>3D 모델링으로 설계한 전체 도면</summary>
+<img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/e58bb35a-eccb-47bf-95e1-2a50016a17f6">
+<img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/4eb7c2dd-8b6d-4b9c-a467-2e138a2aac45">
+<img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/60fdb06b-02ab-49e2-a696-53a483c9b596">
+<img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/45be16cb-ff23-4fde-9445-b4b98be844c6"> (by 석환)
+</details> 
 
-   <img width="800" alt="스크린샷 2023-07-29 오전 12 13 18" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/4ef81217-a6d5-47d3-8266-bdef49cf5575"> (by 지수)
-
-* 3D 모델링으로 설계한 전체 도면 
-  
-   <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/e58bb35a-eccb-47bf-95e1-2a50016a17f6">
-   <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/4eb7c2dd-8b6d-4b9c-a467-2e138a2aac45">
-   <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/60fdb06b-02ab-49e2-a696-53a483c9b596">
-   <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/45be16cb-ff23-4fde-9445-b4b98be844c6"> (by 석환)
