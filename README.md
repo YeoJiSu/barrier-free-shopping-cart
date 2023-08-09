@@ -1,12 +1,6 @@
 # 🛒 Barrier Free Shopping Cart
 > 시·청각 장애인을 위한 스마트 쇼핑 카트
 
-### 📌 Members
-* 유한열: PNU 전자공학과
-* 백석환: PNU 항공우주공학과
-* 이수정: PNU 기계공학부
-* 여지수: PNU 정보컴퓨터공학부
-
 ### 📌 개요
 최근 과학 기술이 급속도로 발전해감에 따라 대형 할인 마트는 물론 소형 마트도 자동화가 되고 있다. 또한, 과거에 비해 품목이 다양해지고 있다.
 
@@ -32,17 +26,17 @@
 
 <details>
 <summary>쇼핑 카트 설계도</summary>
-<img width="800" alt="스크린샷 2023-07-29 오전 12 05 13" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/fc163cca-7ea1-42c0-8f9e-974f5c768b48"> (by 석환)
+<img width="800" alt="스크린샷 2023-07-29 오전 12 05 13" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/fc163cca-7ea1-42c0-8f9e-974f5c768b48"><br>(by 석환)
 </details>
   
 <details>
 <summary>쇼핑 카트 평면도</summary>
-<img width="800" alt="스크린샷 2023-07-29 오전 12 04 15" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/306f1d71-ec22-413b-83e7-648f673314a4"> (by 지수)
+<img width="800" alt="스크린샷 2023-07-29 오전 12 04 15" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/306f1d71-ec22-413b-83e7-648f673314a4"> <br>(by 지수)
 </details>
 
 <details>
 <summary>마트 내부 구조도</summary>
-<img width="800" alt="스크린샷 2023-07-29 오전 12 13 18" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/4ef81217-a6d5-47d3-8266-bdef49cf5575"> (by 지수)
+<img width="800" alt="스크린샷 2023-07-29 오전 12 13 18" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/4ef81217-a6d5-47d3-8266-bdef49cf5575"> <br>(by 지수)
 </details> 
 
 <details>
@@ -50,6 +44,12 @@
 <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/e58bb35a-eccb-47bf-95e1-2a50016a17f6">
 <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/4eb7c2dd-8b6d-4b9c-a467-2e138a2aac45">
 <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/60fdb06b-02ab-49e2-a696-53a483c9b596">
-<img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/45be16cb-ff23-4fde-9445-b4b98be844c6"> (by 석환)
+<img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/45be16cb-ff23-4fde-9445-b4b98be844c6"> <br>(by 석환)
 </details> 
+
+### 📌 함께한 Members
+* 유한열: PNU 전자공학과
+* 백석환: PNU 항공우주공학과
+* 이수정: PNU 기계공학부
+* 여지수: PNU 정보컴퓨터공학부
 
