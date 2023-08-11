@@ -58,6 +58,25 @@ void Go_Right() {
   delay(20);
 }
 
+void Line_Trace() {
+  if (digitalRead(IRL)==LOW && digitalRead(IRR)==LOW){
+      Go_Forward();
+      Serial.println("전진");
+  }
+  if (digitalRead(IRL)==HIGH && digitalRead(IRR)==LOW){
+    Go_Right();
+    Serial.println("오른쪽으로");
+  }
+  if (digitalRead(IRL)==LOW && digitalRead(IRR)==HIGH){
+    Go_Left();
+    Serial.println("왼쪽으로");
+  }
+  if (digitalRead(IRL)==HIGH && digitalRead(IRR)==HIGH){
+    Stop_Release();
+    Serial.println("정지");
+  }    
+}
+
 void setup() {
 
   pinMode(trig, OUTPUT); // 초음파 센서 trigger pin의 pinmode 설정 (초음파 송신)
@@ -70,6 +89,9 @@ void setup() {
   pinMode(but_3, INPUT); 
   pinMode(but_2, INPUT);
   pinMode(but_1, INPUT);
+  // 적외선 센서
+  pinMode(IRR, INPUT);
+  pinMode(IRL, INPUT);
 
   MOTOR1.setSpeed(250);
   MOTOR2.setSpeed(250);
@@ -106,13 +128,12 @@ void loop() {
   if (digitalRead(but_2)==HIGH) { // 카트 출발 시키기
     //delay(20);
     cart_state = 2;
-    Go_Forward();
   }
   if (digitalRead(but_3)==HIGH) { // 카트 정지 시키기
     //delay(20);
-    cart_state = 0;     
-    Stop_Release();                                          
+    cart_state = 0;                                             
   }
+
 
   float len, distance;
   digitalWrite(trig, LOW); // 초기화
@@ -133,7 +154,7 @@ void loop() {
   if (distance>10 & cart_state == 1) { // 일시 정지 상태라면
     cart_state = 2; // 카트 다시 출발
     noTone(piezo);
-    Go_Forward();
+    Line_Trace();
   }
   
   if (cart_state == 0){ // 정지 상태라면, 
@@ -141,18 +162,21 @@ void loop() {
     digitalWrite(led_R, HIGH);
     digitalWrite(led_Y, LOW);
     digitalWrite(led_B, LOW);
+    Stop_Release();  
   }
   if (cart_state == 1) { // 일시 정지 상태라면,
     Serial.println("카트 일시정지 상태.");
     digitalWrite(led_R, LOW);
     digitalWrite(led_Y, HIGH);
     digitalWrite(led_B, LOW); 
+    Stop_Release();  
   }
   if (cart_state == 2) { // 출발 상태라면, 
     Serial.println("카트 출발 상태.");
     digitalWrite(led_R, LOW);
     digitalWrite(led_Y, LOW);
-    digitalWrite(led_B, HIGH);     
+    digitalWrite(led_B, HIGH);   
+    Line_Trace();  
   }
   
   delay(100);
