@@ -1,23 +1,36 @@
 #include <SoftwareSerial.h>
 #include <AFMotor.h>
+#include "SPI.h"
+#include "MFRC522.h"
+
+// 최종 핀 => SDA 53 | SCK 52 | MOSI 51 | MISO 50 | RST 49
+#define SDA_PIN 53
+#define RST_PIN 49
+MFRC522 mfrc522(SDA_PIN, RST_PIN);
+MFRC522::MIFARE_Key key;
 
 AF_DCMotor MOTOR1(1); // 모터 쉴드 M1 지정
 AF_DCMotor MOTOR2(2); // 모터 쉴드 M2 지정
 AF_DCMotor MOTOR3(3); // 모터 쉴드 M3 지정
 AF_DCMotor MOTOR4(4); // 모터 쉴드 M4 지정
 
-int piezo = 22;
-int trig = 23;
-int echo = 24;
-int led_R = 25;
-int led_Y = 26;
-int led_B = 27;
-int but_3 = 28; // 정지 기능
-int but_2 = 29; // 출발 기능
-int but_1 = 30; // 마이크로 말하는 기능
-int led_G = 31; // 마이크 꺼졌는지 켜졌는지 체크하는 기능
-int IRR = 32; // 오른쪽 적외선 센서
-int IRL = 33; // 왼쪽 적외선 센서
+
+int trig = 22;
+int echo = 23;
+
+int but_1 = 24; // 마이크로 말하는 기능
+int but_2 = 25; // 출발 기능
+int but_3 = 26; // 정지 기능
+
+int piezo = 27;
+int led_G = 28;
+int led_R = 29;
+int led_Y = 30;
+int led_B = 31;
+
+ // 마이크 꺼졌는지 켜졌는지 체크하는 기능
+int IRL = 32; // 왼쪽 적외선 센서
+int IRR = 33; // 오른쪽 적외선 센서
 
 int count_1 = 0;
 int cart_state = 0; // 0 = 정지, 1 = 일시정지, 2 = 출발
@@ -74,8 +87,9 @@ void Line_Trace() {
   if (digitalRead(IRL)==HIGH && digitalRead(IRR)==HIGH){
     Stop_Release();
     Serial.println("정지");
-  }    
+  }
 }
+
 
 void setup() {
 
@@ -104,10 +118,121 @@ void setup() {
   MOTOR4.run(RELEASE);
 
   Serial.begin(9600);
+
+  SPI.begin();
+  mfrc522.PCD_Init();
+
 }
 
-void loop() {
+/*
+int START;
+int CROSS;
+int OBJ_1;
+int OBJ_2;
+int OBJ_3;
 
+int START_POINT;
+int DESTINATION;
+
+if (START_POINT == START & DESTINATION == OBJ_1) {
+  // START -> right (delay 100 정도 걸고 두개다 lowlow 인식될 때까지 돌기)
+  // OBJ_1 -> stop
+}
+if (START_POINT == START & DESTINATION == OBJ_2) {
+  // START -> forward 
+  // OBJ_2 -> stop
+}
+if (START_POINT == START & DESTINATION == OBJ_3) {
+  // START -> left
+  // OBJ_3 -> stop
+}
+if (START_POINT == OBJ_1 & DESTINATION == START) {
+  // START -> stop
+}
+if (START_POINT == OBJ_1 & DESTINATION == OBJ_2) {
+  // if CROSS -> left
+  // if START -> right
+  // OBJ_2 -> stop
+}
+if (START_POINT == OBJ_1 & DESTINATION == OBJ_3) {
+  // OBJ_3 -> stop
+}
+if (START_POINT == OBJ_2 & DESTINATION == START) {
+  // if CROSS -> right
+  // START-> stop
+}
+if (START_POINT == OBJ_2 & DESTINATION == OBJ_1) {
+  // if START -> left
+  // if CROSS -> right
+  // OBJ_1 -> stop
+}
+if (START_POINT == OBJ_2 & DESTINATION == OBJ_3) {
+  // if START -> right
+  // if CROSS -> left
+  // OBJ_3 -> stop
+}
+if (START_POINT == OBJ_3 & DESTINATION == START) {
+  // START -> stop
+}
+if (START_POINT == OBJ_3 & DESTINATION == OBJ_1) {
+  // OBJ_1 -> stop
+}
+if (START_POINT == OBJ_3 & DESTINATION == OBJ_2) {
+  // if START -> left
+  // if CROSS -> right
+  // OBJ_2 -> stop
+}
+/////////////////아래로 실험하면 편하다!
+
+if (DESTINATION == START) {
+  // START -> stop
+}
+if (DESTINATION == OBJ_1) {
+  // OBJ_1 -> stop
+}
+if (DESTINATION == OBJ_2) {
+  // OBJ_2 -> stop
+}
+if (DESTINATION == OBJ_3) {
+  // OBJ_3 -> stop
+}
+*/
+
+void loop() {
+  /*
+  // 만약 카드가 인식 되었다면
+  if (mfrc522.PICC_IsNewCardPresent() & mfrc522.PICC_ReadCardSerial()) {
+
+    MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
+    if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&
+      piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
+      piccType != MFRC522::PICC_TYPE_MIFARE_4K) 
+      {
+      Serial.println(F("Your tag is not of type MIFARE Classic."));
+      return;
+      }
+    String rfid = "";
+    for (byte i = 0; i < 4; i++) {
+      rfid +=
+      (mfrc522.uid.uidByte[i] < 0x10 ? "0" : "") +
+      String(mfrc522.uid.uidByte[i], HEX) +
+      (i!=3 ? ":" : "");
+    }
+  
+    Serial.print("Card key: ");
+    Serial.println(rfid);
+
+    mfrc522.PICC_HaltA();
+    mfrc522.PCD_StopCrypto1();
+    if (rfid == "c0:8f:9e:25") {
+      Serial.println("True");
+    }
+    else {
+      Serial.println("False");
+    }
+    delay(1000);
+  }
+  */
   if (count_1 >= 10000) {count_1 = 0;}
   
   if (digitalRead(but_1)==HIGH) {
@@ -181,4 +306,6 @@ void loop() {
   
   delay(100);
 
+
 }
+
