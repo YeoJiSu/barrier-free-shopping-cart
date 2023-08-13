@@ -14,6 +14,14 @@ AF_DCMotor MOTOR2(2); // 모터 쉴드 M2 지정
 AF_DCMotor MOTOR3(3); // 모터 쉴드 M3 지정
 AF_DCMotor MOTOR4(4); // 모터 쉴드 M4 지정
 
+int START = 0;
+int OBJ_1 = 1;
+int OBJ_2 = 2;
+int OBJ_3 = 3;
+int CROSS = 4;
+int START_POINT = START;
+int DESTINATION = OBJ_1;
+
 
 int trig = 22;
 int echo = 23;
@@ -70,10 +78,52 @@ void Go_Right() {
   MOTOR4.run(FORWARD); // MOTOR4.run(BACKWARD);
   delay(20);
 }
-
+void Stop_Destination() {
+  // 간단하게 만든 함수
+  if (DESTINATION == START) {
+    // START -> stop
+    if (isKey() == START) {
+      Stop_Release();
+    }
+    else {
+      Go_Forward();
+    }
+  }
+  else if (DESTINATION == OBJ_1) {
+    // OBJ_1 -> stop
+    if (isKey() == OBJ_1) {
+      Stop_Release();
+    }  
+    else {
+      Go_Forward();
+    }
+  }
+  else if (DESTINATION == OBJ_2) {
+    // OBJ_2 -> stop
+    if (isKey() == OBJ_2) {
+      Stop_Release();
+    }
+    else {
+      Go_Forward();
+    }
+  }
+  else if (DESTINATION == OBJ_3) {
+    // OBJ_3 -> stop
+    if (isKey() == OBJ_3) {
+      Stop_Release();
+    }  
+    else {
+      Go_Forward();
+    }
+  }
+  else {
+    Go_Forward();
+  }
+}
 void Line_Trace() {
   if (digitalRead(IRL)==LOW && digitalRead(IRR)==LOW){
-      Go_Forward();
+      // Go_Forward();
+      Stop_Destination();
       Serial.println("전진");
   }
   if (digitalRead(IRL)==HIGH && digitalRead(IRR)==LOW){
@@ -125,15 +175,6 @@ void setup() {
 }
 
 /*
-int START;
-int CROSS;
-int OBJ_1;
-int OBJ_2;
-int OBJ_3;
-
-int START_POINT;
-int DESTINATION;
-
 if (START_POINT == START & DESTINATION == OBJ_1) {
   // START -> right (delay 100 정도 걸고 두개다 lowlow 인식될 때까지 돌기)
   // OBJ_1 -> stop
@@ -182,24 +223,9 @@ if (START_POINT == OBJ_3 & DESTINATION == OBJ_2) {
   // if CROSS -> right
   // OBJ_2 -> stop
 }
-/////////////////아래로 실험하면 편하다!
-
-if (DESTINATION == START) {
-  // START -> stop
-}
-if (DESTINATION == OBJ_1) {
-  // OBJ_1 -> stop
-}
-if (DESTINATION == OBJ_2) {
-  // OBJ_2 -> stop
-}
-if (DESTINATION == OBJ_3) {
-  // OBJ_3 -> stop
-}
 */
 
-void loop() {
-  /*
+int isKey() {
   // 만약 카드가 인식 되었다면
   if (mfrc522.PICC_IsNewCardPresent() & mfrc522.PICC_ReadCardSerial()) {
 
@@ -225,14 +251,28 @@ void loop() {
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();
     if (rfid == "c0:8f:9e:25") {
-      Serial.println("True");
+      return START;
+    }
+    if (rfid == "e8:ea:cf:0d") {
+      return OBJ_1;
+    }
+    if (rfid == "e8:a0:6f:0d") {
+      return OBJ_2;
+    }
+    if (rfid == "fb:df:c7:22") {
+      return OBJ_3;
     }
     else {
-      Serial.println("False");
+      return -1;
     }
-    delay(1000);
+    //delay(1000);
   }
-  */
+  return -1;
+}
+void loop() {
+  
+  
+  
   if (count_1 >= 10000) {count_1 = 0;}
   
   if (digitalRead(but_1)==HIGH) {
