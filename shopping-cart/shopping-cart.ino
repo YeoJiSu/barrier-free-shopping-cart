@@ -78,6 +78,7 @@ void Go_Right() {
   MOTOR4.run(FORWARD); // MOTOR4.run(BACKWARD);
   delay(20);
 }
+
 void Stop_Destination() {
   // 간단하게 만든 함수
   if (DESTINATION == START) {
@@ -93,6 +94,7 @@ void Stop_Destination() {
     // OBJ_1 -> stop
     if (isKey() == OBJ_1) {
       Stop_Release();
+      cart_state = 0;
     }  
     else {
       Go_Forward();
@@ -139,7 +141,6 @@ void Line_Trace() {
     Serial.println("정지");
   }
 }
-
 
 void setup() {
 
@@ -226,6 +227,7 @@ if (START_POINT == OBJ_3 & DESTINATION == OBJ_2) {
 */
 
 int isKey() {
+
   // 만약 카드가 인식 되었다면
   if (mfrc522.PICC_IsNewCardPresent() & mfrc522.PICC_ReadCardSerial()) {
 
@@ -270,8 +272,20 @@ int isKey() {
   return -1;
 }
 void loop() {
-  
-  
+  // TODO 마이크 통해서 목적지 입력하는 코드 추가할 것
+  Serial.print("목적지는: ");
+  if (DESTINATION == START) {
+    Serial.println("START");
+  }
+  if (DESTINATION == OBJ_1) {
+    Serial.println("OBJ_1");
+  }
+  if (DESTINATION == OBJ_2) {
+    Serial.println("OBJ_2");
+  }
+  if (DESTINATION == OBJ_3) {
+    Serial.println("OBJ_3");
+  }
   
   if (count_1 >= 10000) {count_1 = 0;}
   
