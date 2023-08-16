@@ -2,17 +2,17 @@
 #include <AFMotor.h>
 #include "SPI.h"
 #include "MFRC522.h"
+#include <DFRobotDFPlayerMini.h>
+#include "VoiceRecognitionV3.h"
 
-// 최종 핀 => SDA 53 | SCK 52 | MOSI 51 | MISO 50 | RST 49
-#define SDA_PIN 53
-#define RST_PIN 49
-MFRC522 mfrc522(SDA_PIN, RST_PIN);
-MFRC522::MIFARE_Key key;
+// 스피커 부분
+SoftwareSerial MP3Module(A14, A15); // 34, 35
+DFRobotDFPlayerMini MP3Player;
 
-AF_DCMotor MOTOR1(1); // 모터 쉴드 M1 지정
-AF_DCMotor MOTOR2(2); // 모터 쉴드 M2 지정
-AF_DCMotor MOTOR3(3); // 모터 쉴드 M3 지정
-AF_DCMotor MOTOR4(4); // 모터 쉴드 M4 지정
+// 마이크 부분
+VR myVR(10,11);    // 2:RX 3:TX,
+uint8_t records[7];
+uint8_t buf[64];
 
 int START = 0;
 int OBJ_1 = 1;
@@ -20,8 +20,7 @@ int OBJ_2 = 2;
 int OBJ_3 = 3;
 int CROSS = 4;
 int START_POINT = START;
-int DESTINATION = OBJ_1;
-
+int DESTINATION = START;
 
 int trig = 22;
 int echo = 23;
@@ -36,12 +35,18 @@ int led_R = 29;
 int led_Y = 30;
 int led_B = 31;
 
- // 마이크 꺼졌는지 켜졌는지 체크하는 기능
-int IRL = 32; // 왼쪽 적외선 센서
-int IRR = 33; // 오른쪽 적외선 센서
+int IRL = 32; // 왼쪽 적외선 센서 (초)
+int IRM = 33; // 중간 적외선 센서 (갈)
+int IRR = 34; // 오른쪽 적외선 센서 (노)
 
 int count_1 = 0;
 int cart_state = 0; // 0 = 정지, 1 = 일시정지, 2 = 출발
+
+// 모터 부분
+AF_DCMotor MOTOR1(1); // 모터 쉴드 M1 지정
+AF_DCMotor MOTOR2(2); // 모터 쉴드 M2 지정
+AF_DCMotor MOTOR3(3); // 모터 쉴드 M3 지정
+AF_DCMotor MOTOR4(4); // 모터 쉴드 M4 지정
 
 void Stop_Release() {
   MOTOR1.run(RELEASE);
@@ -51,183 +56,42 @@ void Stop_Release() {
   delay(20);
 }
 void Go_Forward() {
-  MOTOR1.run(FORWARD);
+  MOTOR1.run(BACKWARD);
   MOTOR2.run(BACKWARD);
-  MOTOR3.run(BACKWARD);
+  MOTOR3.run(FORWARD);
   MOTOR4.run(BACKWARD);
   delay(20);
 }
 void Go_Backward() {
-  MOTOR1.run(BACKWARD);
+  MOTOR1.run(FORWARD);
   MOTOR2.run(FORWARD);
-  MOTOR3.run(FORWARD);
+  MOTOR3.run(BACKWARD);
   MOTOR4.run(FORWARD);
   delay(20);
 }
 void Go_Left() {
-  MOTOR1.run(FORWARD); // MOTOR1.run(FORWARD); 
+  MOTOR1.run(BACKWARD); // MOTOR1.run(FORWARD); 
   MOTOR2.run(FORWARD); // MOTOR2.run(BACKWARD);
-  MOTOR3.run(FORWARD); // MOTOR3.run(BACKWARD);
+  MOTOR3.run(BACKWARD); // MOTOR3.run(BACKWARD);
   MOTOR4.run(BACKWARD); // MOTOR4.run(FORWARD);
   delay(20);
 }
 void Go_Right() {
-  MOTOR1.run(BACKWARD); // MOTOR1.run(BACKWARD);
+  MOTOR1.run(FORWARD); // MOTOR1.run(BACKWARD);
   MOTOR2.run(BACKWARD); // MOTOR2.run(FORWARD); 
-  MOTOR3.run(BACKWARD); // MOTOR3.run(FORWARD); 
+  MOTOR3.run(FORWARD); // MOTOR3.run(FORWARD); 
   MOTOR4.run(FORWARD); // MOTOR4.run(BACKWARD);
   delay(20);
 }
 
-void Stop_Destination() {
-  // 간단하게 만든 함수
-  if (DESTINATION == START) {
-    // START -> stop
-    if (isKey() == START) {
-      Stop_Release();
-    }
-    else {
-      Go_Forward();
-    }
-  }
-  else if (DESTINATION == OBJ_1) {
-    // OBJ_1 -> stop
-    if (isKey() == OBJ_1) {
-      Stop_Release();
-      cart_state = 0;
-    }  
-    else {
-      Go_Forward();
-    }
-  }
-  else if (DESTINATION == OBJ_2) {
-    // OBJ_2 -> stop
-    if (isKey() == OBJ_2) {
-      Stop_Release();
-    }
-    else {
-      Go_Forward();
-    }
-  }
-  else if (DESTINATION == OBJ_3) {
-    // OBJ_3 -> stop
-    if (isKey() == OBJ_3) {
-      Stop_Release();
-    }  
-    else {
-      Go_Forward();
-    }
-  }
-  else {
-    Go_Forward();
-  }
-}
-void Line_Trace() {
-  if (digitalRead(IRL)==LOW && digitalRead(IRR)==LOW){
-      // Go_Forward();
-      Stop_Destination();
-      Serial.println("전진");
-  }
-  if (digitalRead(IRL)==HIGH && digitalRead(IRR)==LOW){
-    Go_Right();
-    Serial.println("오른쪽으로");
-  }
-  if (digitalRead(IRL)==LOW && digitalRead(IRR)==HIGH){
-    Go_Left();
-    Serial.println("왼쪽으로");
-  }
-  if (digitalRead(IRL)==HIGH && digitalRead(IRR)==HIGH){
-    Stop_Release();
-    Serial.println("정지");
-  }
-}
-
-void setup() {
-
-  pinMode(trig, OUTPUT); // 초음파 센서 trigger pin의 pinmode 설정 (초음파 송신)
-  pinMode(echo, INPUT); // 초음파 센서 ech pin의 pinmode 설정 (초음파 수신)
-  pinMode(led_R, OUTPUT); // LED RED
-  pinMode(led_Y, OUTPUT); // LED YELLOW
-  pinMode(led_B, OUTPUT); // LED BLUE
-  pinMode(led_G, OUTPUT);
-  // GND에 저항을 연결해서 풀다운 저항 푸시 버튼 스위치이다.
-  pinMode(but_3, INPUT); 
-  pinMode(but_2, INPUT);
-  pinMode(but_1, INPUT);
-  // 적외선 센서
-  pinMode(IRR, INPUT);
-  pinMode(IRL, INPUT);
-
-  MOTOR1.setSpeed(250);
-  MOTOR2.setSpeed(250);
-  MOTOR3.setSpeed(250);
-  MOTOR4.setSpeed(250);
-
-  MOTOR1.run(RELEASE);
-  MOTOR2.run(RELEASE);
-  MOTOR3.run(RELEASE);
-  MOTOR4.run(RELEASE);
-
-  Serial.begin(9600);
-
-  SPI.begin();
-  mfrc522.PCD_Init();
-
-}
-
-/*
-if (START_POINT == START & DESTINATION == OBJ_1) {
-  // START -> right (delay 100 정도 걸고 두개다 lowlow 인식될 때까지 돌기)
-  // OBJ_1 -> stop
-}
-if (START_POINT == START & DESTINATION == OBJ_2) {
-  // START -> forward 
-  // OBJ_2 -> stop
-}
-if (START_POINT == START & DESTINATION == OBJ_3) {
-  // START -> left
-  // OBJ_3 -> stop
-}
-if (START_POINT == OBJ_1 & DESTINATION == START) {
-  // START -> stop
-}
-if (START_POINT == OBJ_1 & DESTINATION == OBJ_2) {
-  // if CROSS -> left
-  // if START -> right
-  // OBJ_2 -> stop
-}
-if (START_POINT == OBJ_1 & DESTINATION == OBJ_3) {
-  // OBJ_3 -> stop
-}
-if (START_POINT == OBJ_2 & DESTINATION == START) {
-  // if CROSS -> right
-  // START-> stop
-}
-if (START_POINT == OBJ_2 & DESTINATION == OBJ_1) {
-  // if START -> left
-  // if CROSS -> right
-  // OBJ_1 -> stop
-}
-if (START_POINT == OBJ_2 & DESTINATION == OBJ_3) {
-  // if START -> right
-  // if CROSS -> left
-  // OBJ_3 -> stop
-}
-if (START_POINT == OBJ_3 & DESTINATION == START) {
-  // START -> stop
-}
-if (START_POINT == OBJ_3 & DESTINATION == OBJ_1) {
-  // OBJ_1 -> stop
-}
-if (START_POINT == OBJ_3 & DESTINATION == OBJ_2) {
-  // if START -> left
-  // if CROSS -> right
-  // OBJ_2 -> stop
-}
-*/
+// RFID 부분
+// 최종 핀 => SDA 53 | SCK 52 | MOSI 51 | MISO 50 | RST 49
+#define SDA_PIN 53
+#define RST_PIN 49
+MFRC522 mfrc522(SDA_PIN, RST_PIN);
+MFRC522::MIFARE_Key key;
 
 int isKey() {
-
   // 만약 카드가 인식 되었다면
   if (mfrc522.PICC_IsNewCardPresent() & mfrc522.PICC_ReadCardSerial()) {
 
@@ -271,21 +135,176 @@ int isKey() {
   }
   return -1;
 }
-void loop() {
-  // TODO 마이크 통해서 목적지 입력하는 코드 추가할 것
-  Serial.print("목적지는: ");
+
+void Stop_Destination() {
+  // 간단하게 만든 함수
   if (DESTINATION == START) {
-    Serial.println("START");
+    // START -> stop
+    if (isKey() == START) {
+      cart_state = 0;
+      Stop_Release();
+      //delay(1000);
+    }
   }
-  if (DESTINATION == OBJ_1) {
-    Serial.println("OBJ_1");
+  else if (DESTINATION == OBJ_1) {
+    // OBJ_1 -> stop
+    if (isKey() == OBJ_1) {
+      cart_state = 0;
+      Stop_Release();
+      //delay(1000);
+    } 
   }
-  if (DESTINATION == OBJ_2) {
-    Serial.println("OBJ_2");
+  else if (DESTINATION == OBJ_2) {
+    // OBJ_2 -> stop
+    if (isKey() == OBJ_2) {
+      cart_state = 0;
+      Stop_Release();
+      //delay(1000);
+    }
   }
-  if (DESTINATION == OBJ_3) {
-    Serial.println("OBJ_3");
+  else if (DESTINATION == OBJ_3) {
+    // OBJ_3 -> stop
+    if (isKey() == OBJ_3) {
+      cart_state = 0;
+      Stop_Release();
+      //delay(1000);
+    }  
   }
+}
+
+void Line_Trace() {
+  // 0 0 0 
+  if (digitalRead(IRL)==LOW && digitalRead(IRR)==LOW) {
+    
+  }
+  if (digitalRead(IRL)==HIGH && digitalRead(IRR)==HIGH){
+    Go_Forward();
+    Serial.println("전진");
+  }
+  if (digitalRead(IRL)==LOW && digitalRead(IRR)==HIGH){
+    Go_Right();
+    Serial.println("오른쪽으로");
+  }
+  if (digitalRead(IRL)==HIGH && digitalRead(IRR)==LOW){
+    Go_Left();
+    Serial.println("왼쪽으로");
+  }
+  if (digitalRead(IRL)==LOW && digitalRead(IRR)==LOW){
+    //Stop_Release();
+    Go_Left();
+    Serial.println("정지");
+  }
+}
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  myVR.begin(9600);
+  MP3Module.begin(9600);
+  if (!MP3Player.begin(MP3Module)) { // MP3 모듈을 초기화합니다. 초기화에 실패하면 오류를 발생시킵니다.
+    Serial.println(F("Unable to begin:"));
+    Serial.println(F("1.Please recheck the connection!"));
+    Serial.println(F("2.Please insert the SD card!"));
+    while (true);
+  }
+  MP3Player.volume(20);  // 볼륨을 조절합니다. 0~30까지 설정이 가능합니다.
+  MP3Player.play(2);
+  delay(1000);
+
+  pinMode(trig, OUTPUT); // 초음파 센서 trigger pin의 pinmode 설정 (초음파 송신)
+  pinMode(echo, INPUT); // 초음파 센서 ech pin의 pinmode 설정 (초음파 수신)
+
+  pinMode(led_R, OUTPUT); // LED RED
+  pinMode(led_Y, OUTPUT); // LED YELLOW
+  pinMode(led_B, OUTPUT); // LED BLUE
+  pinMode(led_G, OUTPUT);
+  // GND에 저항을 연결해서 풀다운 저항 푸시 버튼 스위치이다.
+  pinMode(but_3, INPUT); 
+  pinMode(but_2, INPUT);
+  pinMode(but_1, INPUT);
+  // 적외선 센서
+  pinMode(IRR, INPUT);
+  pinMode(IRL, INPUT);
+
+  MOTOR1.setSpeed(200);
+  MOTOR2.setSpeed(200);
+  MOTOR3.setSpeed(200);
+  MOTOR4.setSpeed(200);
+
+  MOTOR1.run(RELEASE);
+  MOTOR2.run(RELEASE);
+  MOTOR3.run(RELEASE);
+  MOTOR4.run(RELEASE);
+
+  SPI.begin();
+  mfrc522.PCD_Init();
+}
+
+void loop() {
+  
+  // put your main code here, to run repeatedly:
+  Stop_Destination();
+  int ret;
+  ret = myVR.recognize(buf, 50);
+  if(ret>0)
+  {
+    // 0, 1 콜라
+    // 2,3 새우깡
+    // 4,5 파인애플
+    // 6 시작점
+    
+    Serial.print(buf[1]);
+    Serial.println("");
+    if (buf[1] == 6) {
+      Serial.println("출발지점으로");
+      MP3Player.play(1);
+    }
+    if ((buf[1] == 0) | (buf[1] == 1)) {
+      Serial.println("물체 1(콜라)로");
+      MP3Player.play(3);
+    }
+    if ((buf[1] == 2) | (buf[1] == 3)) {
+      Serial.println("물체 2(새우깡)로");
+      MP3Player.play(4);
+    }
+    if ((buf[1] == 4) | (buf[1] == 5)) {
+      Serial.println("물체 3(파인애플)로");
+      MP3Player.play(5);
+    }
+  }
+  
+  int val_x = analogRead(A8);
+  int val_y = analogRead(A9);
+  Serial.print(val_x);
+  Serial.print(", ");
+  Serial.println(val_y);
+  
+  if (val_x < 10) {
+    // 출발지점으로 이동합니다.
+    Serial.println("출발지점으로");
+    DESTINATION = START;
+    MP3Player.play(1);
+  }
+  if (val_y < 10) {
+    Serial.println("물체 1(콜라)로");
+    MP3Player.play(3);
+    DESTINATION = OBJ_1;
+  }
+  if (val_x > 1000){
+    Serial.println("물체 2(새우깡)로");
+    MP3Player.play(4);
+    DESTINATION = OBJ_2;
+  }
+  if (val_y > 1000){
+    Serial.println("물체 3(파인애플)로");
+    MP3Player.play(5);
+    DESTINATION = OBJ_3;
+  }
+  
+  
+  Serial.print("목적지는: ");
+  Serial.println(DESTINATION);
+  
   
   if (count_1 >= 10000) {count_1 = 0;}
   
@@ -313,7 +332,6 @@ void loop() {
     cart_state = 0;                                             
   }
 
-
   float len, distance;
   digitalWrite(trig, LOW); // 초기화
   delay(2);
@@ -329,6 +347,7 @@ void loop() {
     cart_state = 1; // 카트 일시정지
     Stop_Release();
     tone(piezo, 494);
+    MP3Player.play(7);
   }
   if (distance>10 & cart_state == 1) { // 일시 정지 상태라면
     cart_state = 2; // 카트 다시 출발
@@ -360,6 +379,4 @@ void loop() {
   
   delay(100);
 
-
 }
-
