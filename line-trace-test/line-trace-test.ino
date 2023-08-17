@@ -103,10 +103,10 @@ void setup() {
   pinMode(IRM, INPUT);
   pinMode(IRL, INPUT);
 
-  MOTOR1.setSpeed(255);
-  MOTOR2.setSpeed(255);
-  MOTOR3.setSpeed(255);
-  MOTOR4.setSpeed(255);
+  MOTOR1.setSpeed(100);
+  MOTOR2.setSpeed(100);
+  MOTOR3.setSpeed(100);
+  MOTOR4.setSpeed(100);
 
   MOTOR1.run(RELEASE);
   MOTOR2.run(RELEASE);
@@ -119,9 +119,9 @@ void setup() {
 }
 
 void loop() {
-  Line_Trace();
+  // Line_Trace();
   // Go_Forward();
-  // Go_Right();
+  Go_Right();
   // Go_Left();
 
 }
