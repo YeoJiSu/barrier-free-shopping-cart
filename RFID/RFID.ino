@@ -9,14 +9,12 @@ MFRC522 mfrc522(SDA_PIN, RST_PIN);
 
 MFRC522::MIFARE_Key key;
 
-int led = 2;
 
 void setup() 
 {
   Serial.begin(9600);
   SPI.begin();
   mfrc522.PCD_Init();
-  pinMode (led, OUTPUT);
 }
 
 void loop() 
@@ -46,19 +44,11 @@ void loop()
     (i!=3 ? ":" : "");
   }
 
-  digitalWrite(led, HIGH);
-  delay (1000);
-  digitalWrite(led, LOW);
   
   Serial.print("Card key: ");
   Serial.println(rfid);
 
   mfrc522.PICC_HaltA();
   mfrc522.PCD_StopCrypto1();
-  if (rfid == "c0:8f:9e:25") {
-    Serial.println("True");
-  }
-  else {
-    Serial.println("False");
-  }
+
 }

@@ -38,16 +38,16 @@ int isKey() {
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();
     if (rfid == "c0:8f:9e:25") {
-      return START;
+      Serial.println("START");
     }
     if (rfid == "e8:ea:cf:0d") {
-      return OBJ_1;
+      Serial.println("OBJ_1");
     }
     if (rfid == "e8:a0:6f:0d") {
-      return OBJ_2;
+      Serial.println("OBJ_2");
     }
     if (rfid == "fb:df:c7:22") {
-      return OBJ_3;
+      Serial.println("OBJ_3");
     }
     else {
       return -1;
@@ -64,10 +64,7 @@ void setup() {
 }
 
 void loop() {
-  if (isKey() == START) {Serial.println("START");}
-  if (isKey() == OBJ_1) {Serial.println("OBJ_1");}
-  if (isKey() == OBJ_2) {Serial.println("OBJ_2");}
-  if (isKey() == OBJ_3) {Serial.println("OBJ_3");}
+  isKey();
   // put your main code here, to run repeatedly:
 
 }
