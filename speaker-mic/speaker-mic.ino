@@ -3,8 +3,15 @@
 #include "SPI.h"
 #include "MFRC522.h"
 #include <DFRobotDFPlayerMini.h>
+#include "VoiceRecognitionV3.h"
+// 스피커 부분
 SoftwareSerial MP3Module(A14, A15); // 34, 35
 DFRobotDFPlayerMini MP3Player;
+
+// 마이크 부분
+VR myVR(10,11);    // 2:RX 3:TX,
+uint8_t records[7];
+uint8_t buf[64];
 
 void setup() {
   // put your setup code here, to run once:
@@ -18,36 +25,42 @@ void setup() {
     while (true);
   }
   MP3Player.volume(20);  // 볼륨을 조절합니다. 0~30까지 설정이 가능합니다.
-  MP3Player.play(1);
+  // MP3Player.play(1);
   delay(1000);
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  int val_x = analogRead(A8);
-  int val_y = analogRead(A9);
 
-  if (val_x < 10) {
-    // 출발지점으로 이동합니다.
-    Serial.println("출발지점으로");
-    MP3Player.play(1);
-    DESTINATION = START;
+  int ret;
+  ret = myVR.recognize(buf, 50);
+  if(ret>0)
+  {
+    // 0, 1 콜라
+    // 2,3 새우깡
+    // 4,5 파인애플
+    // 6 시작점
+    
+    Serial.print(buf[1]);
+    Serial.println("");
+    
+
+    if (buf[1] == 1){
+      Serial.println("빨강");
+      MP3Player.play(3);
+    } 
+    if (buf[1] == 2){
+      Serial.println("빨강");
+      MP3Player.play(3);
+    } 
+    if (buf[1] == 3){
+      Serial.println("빨강");
+      MP3Player.play(3);
+    } 
+    if (buf[1] == 4){
+      Serial.println("빨강");
+      MP3Player.play(3);
+    } 
+
   }
-  if (val_y < 10) {
-    Serial.println("물체 1(콜라)로");
-    MP3Player.play(3);
-    DESTINATION = OBJ_1;
-  }
-  if (val_x > 1000) {
-    Serial.println("물체 2(새우깡)로");
-    MP3Player.play(4);
-    DESTINATION = OBJ_2;
-  }
-  if (val_y > 1000) {
-    Serial.println("물체 3(파인애플)로");
-    MP3Player.play(5);
-    DESTINATION = OBJ_3;
-  }
-  delay(100);
 }
