@@ -62,7 +62,72 @@ void Go_Forward() {
   MOTOR4.run(BACKWARD);
   delay(20);
 }
+void Go_Backward() {
+  MOTOR1.run(FORWARD);
+  MOTOR2.run(FORWARD);
+  MOTOR3.run(BACKWARD);
+  MOTOR4.run(FORWARD);
+  delay(20);
+}
+void Go_Left() {
+  MOTOR1.run(BACKWARD); // MOTOR1.run(FORWARD); 
+  MOTOR2.run(FORWARD); // MOTOR2.run(BACKWARD);
+  MOTOR3.run(BACKWARD); // MOTOR3.run(BACKWARD);
+  MOTOR4.run(BACKWARD); // MOTOR4.run(FORWARD);
+  delay(20);
+}
+void Go_Right() {
+  MOTOR1.run(FORWARD); // MOTOR1.run(BACKWARD);
+  MOTOR2.run(BACKWARD); // MOTOR2.run(FORWARD); 
+  MOTOR3.run(FORWARD); // MOTOR3.run(FORWARD); 
+  MOTOR4.run(FORWARD); // MOTOR4.run(BACKWARD);
+  delay(20);
+}
+void Line_Trace() {
+  // 0 0 0 
+  if (digitalRead(IRL)==LOW && digitalRead(IRM)==LOW && digitalRead(IRR)==LOW)  { // 0 0 0
+    delay(20);
+    Go_Right();
+    Serial.println("0 0 0");
+  }
+  if (digitalRead(IRL)==HIGH && digitalRead(IRM)==LOW && digitalRead(IRR)==HIGH)  { // 1 0 1
+    delay(20);
+    Go_Right();
+    Serial.println("1 0 1");
+  }
+  if (digitalRead(IRL)==LOW && digitalRead(IRM)==LOW && digitalRead(IRR)==HIGH)  { // 0 0 1
+    delay(20);
+    Go_Right();
+    Serial.println("0 0 1");
+  }
+  if (digitalRead(IRL)==LOW && digitalRead(IRM)==HIGH && digitalRead(IRR)==HIGH)  { // 0 1 1
+    delay(20);
+    Go_Right();
+    Serial.println("0 1 1");
+    //delay(1000);
+  }
+  if (digitalRead(IRL)==HIGH && digitalRead(IRM)==LOW && digitalRead(IRR)==LOW)  { // 1 0 0
+    delay(20);
+    Go_Left();
+    Serial.println("1 0 0");
+  }
+  if (digitalRead(IRL)==HIGH && digitalRead(IRM)==HIGH && digitalRead(IRR)==LOW)  { // 1 1 0
+    delay(20);
+    Go_Left();
+    Serial.println("1 1 0");
+  }
+  if (digitalRead(IRL)==HIGH && digitalRead(IRM)==HIGH && digitalRead(IRR)==HIGH)  { // 1 1 1
+    delay(20);
+    Go_Forward();
+    Serial.println("1 1 1");
+  }
+  if (digitalRead(IRL)==LOW && digitalRead(IRM)==HIGH && digitalRead(IRR)==LOW)  { // 0 1 0
+    delay(20);
+    Go_Forward();
+    Serial.println("0 1 0");
+  }
 
+}
 // RFID 부분
 // 최종 핀 => SDA 53 | SCK 52 | MOSI 51 | MISO 50 | RST 49
 #define SDA_PIN 53
@@ -127,7 +192,7 @@ void setup() {
     Serial.println(F("2.Please insert the SD card!"));
     while (true);
   }
-  MP3Player.volume(10);  // 볼륨을 조절합니다. 0~30까지 설정이 가능합니다.
+  MP3Player.volume(30);  // 볼륨을 조절합니다. 0~30까지 설정이 가능합니다.
   MP3Player.play(2);
   delay(1000);
 
@@ -208,6 +273,35 @@ void loop() {
       // 마이크 작동 기능
       digitalWrite(led_G, HIGH);
       Serial.println("마이크 작동합니다.");
+      int ret;
+      ret = myVR.recognize(buf, 50);
+      if(ret>0)
+      {
+        // 0, 1 콜라
+        // 2,3 새우깡
+        // 4,5 파인애플
+        // 6 시작점
+        
+        Serial.print(buf[1]);
+        Serial.println("");
+        if (buf[1] == 6) {
+          Serial.println("출발지점으로");
+          MP3Player.play(1);
+        }
+        if ((buf[1] == 0) | (buf[1] == 1)) {
+          Serial.println("물체 1(콜라)로");
+          MP3Player.play(3);
+        }
+        if ((buf[1] == 2) | (buf[1] == 3)) {
+          Serial.println("물체 2(새우깡)로");
+          MP3Player.play(4);
+        }
+        if ((buf[1] == 4) | (buf[1] == 5)) {
+          Serial.println("물체 3(파인애플)로");
+          MP3Player.play(5);
+        }
+      }
+
     }
     if (count_1 % 2 == 0) {
       // 마이크 작동X 
