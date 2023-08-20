@@ -50,7 +50,7 @@
 <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/45be16cb-ff23-4fde-9445-b4b98be844c6"> <br>(by 석환)
 </details> 
 
-### 📌 시연 영상 
+### 📌 [시연 영상](https://photos.app.goo.gl/9aY2Vg7uSZfWGJto8) 
 [<img width="600" alt="스크린샷 2023-08-20 오후 4 47 30" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/6aca0654-6713-48f4-8dc3-d61a4f6b0eb8">](https://photos.app.goo.gl/9aY2Vg7uSZfWGJto8)
 
 
