@@ -1,5 +1,6 @@
 # 🛒 Barrier Free Shopping Cart
-> 배리어프리 스마트 자동 쇼핑 카트 
+> 배리어프리 스마트 자동 쇼핑 카트 <br>
+> 🏅 '부산대학교 하이-메이커톤 대회' 우수상 수상 
 
 ### 📌 개요
 최근 과학 기술이 급속도로 발전해감에 따라 대형 할인 마트는 물론 소형 마트도 자동화가 되고 있다. 또한, 과거에 비해 품목이 다양해지고 있다.
@@ -48,6 +49,10 @@
 <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/60fdb06b-02ab-49e2-a696-53a483c9b596">
 <img width="400" alt="스크린샷 2023-07-29 오전 12 08 26" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/45be16cb-ff23-4fde-9445-b4b98be844c6"> <br>(by 석환)
 </details> 
+
+### 📌 시연 영상 
+[<img width="600" alt="스크린샷 2023-08-20 오후 4 47 30" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/6aca0654-6713-48f4-8dc3-d61a4f6b0eb8">](https://photos.app.goo.gl/9aY2Vg7uSZfWGJto8)
+
 
 ### 📌 함께한 Members
 * 유한열: PNU 전자공학과
