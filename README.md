@@ -51,7 +51,12 @@
 </details> 
 
 ### 📌 [시연 영상](https://photos.app.goo.gl/9aY2Vg7uSZfWGJto8) 
-[<img width="600" alt="스크린샷 2023-08-20 오후 4 47 30" src="https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/6aca0654-6713-48f4-8dc3-d61a4f6b0eb8">](https://photos.app.goo.gl/9aY2Vg7uSZfWGJto8)
+<!--[![텍스트](http://cfile24.uf.tistory.com/image/2444873B57E257821FA2AE)](https://unity3d.com/kr)-->
+
+[![텍스트](https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/efce2015-6107-4396-aa2c-4eaa6cdb3bc4)](https://photos.app.goo.gl/9aY2Vg7uSZfWGJto8)
+
+
+
 
 
 ### 📌 함께한 Members
