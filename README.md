@@ -53,7 +53,7 @@
 ### 📌 [시연 영상](https://photos.app.goo.gl/9aY2Vg7uSZfWGJto8) 
 <!--[![텍스트](http://cfile24.uf.tistory.com/image/2444873B57E257821FA2AE)](https://unity3d.com/kr)-->
 
-[![텍스트](https://github.com/YeoJiSu/barrier-free-shopping-cart/assets/76769044/efce2015-6107-4396-aa2c-4eaa6cdb3bc4)](https://photos.app.goo.gl/9aY2Vg7uSZfWGJto8)
+[![시연 영상](https://photos.app.goo.gl/AQB5py4Hb7Za1MeLA)](https://photos.app.goo.gl/9aY2Vg7uSZfWGJto8)
 
 
 
